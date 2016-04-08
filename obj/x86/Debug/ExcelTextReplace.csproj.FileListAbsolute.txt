@@ -1,0 +1,14 @@
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\ExcelTextReplace.exe.config
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\ExcelTextReplace.exe
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\ExcelTextReplace.pdb
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\ICSharpCode.SharpZipLib.dll
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\Newtonsoft.Json.dll
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\NPOI.dll
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\NPOI.OOXML.dll
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\NPOI.OpenXml4Net.dll
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\NPOI.OpenXmlFormats.dll
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\Newtonsoft.Json.pdb
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\bin\Debug\Newtonsoft.Json.xml
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\obj\x86\Debug\ExcelTextReplace.exe
+D:\workspace_vs\ExcelTextReplace\ExcelTextReplace\obj\x86\Debug\ExcelTextReplace.pdb
