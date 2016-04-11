@@ -177,7 +177,6 @@ namespace ExcelTextReplace
             }
         }
 
-
         public static string replaceTextAllSheet(string source,string target, List<Dictionary<string, string>> replaceDatas)
         {
             using (FileStream fs = new FileStream(source, FileMode.Open, FileAccess.Read))
@@ -233,6 +232,123 @@ namespace ExcelTextReplace
                     fs1.Flush();
 
                     return target;
+                }
+            }
+        }
+
+
+        public static string replaceTextAllSheet(string source, string target, List<ReplaceDataVO> rpDatas)
+        {
+            using (FileStream fs = new FileStream(source, FileMode.Open, FileAccess.Read))
+            {
+                HSSFWorkbook hssfworkbook = new HSSFWorkbook(fs);
+                foreach (ReplaceDataVO rpData in rpDatas)
+                {
+                    if (rpData.SheetIndex > hssfworkbook.NumberOfSheets)
+                    {
+                        throw new ExcelTextReplaceException("Sheet索引超出,最大索引值：[" + hssfworkbook.NumberOfSheets + "],当前传入的索引值：["+rpData.SheetIndex+"]");
+                    }
+
+                    //HSSFSheet 
+                    HSSFSheet sheet = (HSSFSheet)hssfworkbook.GetSheetAt(rpData.SheetIndex - 1);
+
+                    //新增行
+                    foreach (RowDataVO rowData in rpData.RowData)
+                    {
+                        InsertRows(ref sheet, rowData.From, rowData.Rows);
+                    }
+
+                    var rows = sheet.GetRowEnumerator();
+                    while (rows.MoveNext())
+                    {
+                        var row = (HSSFRow)rows.Current;
+                        for (var i = 0; i < row.LastCellNum; i++)
+                        {
+                            HSSFCell cell = (HSSFCell)row.GetCell(i);
+                            if (cell != null)
+                            {
+                                String cellValue = cell.ToString();
+                                //游离文本替换
+                                foreach (PlaceHolderVO phVo in rpData.PlaceHolderData)
+                                {
+                                    if (phVo.Holder.Equals(cellValue))
+                                    {
+                                        cell.SetCellValue(phVo.Value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    //插入指定的单元格
+                    foreach (LocationDataVO ltDataVo in rpData.LocationData)
+                    {
+                        if (ltDataVo.Localtion == null)
+                        {
+                            Console.WriteLine("11");
+                        }
+                        int[] arr = ExcelTools.getCellPoint(ltDataVo.Localtion);
+                        IRow row = sheet.GetRow(arr[0]);
+                        ICell cell;
+                        if (row == null)
+                        {
+                            row = sheet.CreateRow(arr[0]);
+                            cell = row.CreateCell(arr[1]);
+                        }
+                        else
+                        {
+                            cell = row.GetCell(arr[1]);
+                            if (cell == null)
+                            {
+                                cell = row.CreateCell(arr[1]);
+                            }
+                        }
+
+                        cell.SetCellValue(ltDataVo.Value);
+                    }
+                }
+
+                //另存为
+                MemoryStream stream = new MemoryStream();
+                hssfworkbook.Write(stream);
+                var buf = stream.ToArray();
+
+                //保存为Excel文件  
+                using (FileStream fs1 = new FileStream(target, FileMode.Create, FileAccess.Write))
+                {
+                    fs1.Write(buf, 0, buf.Length);
+                    fs1.Flush();
+
+                    return target;
+                }
+            }
+        }
+
+        private static void InsertRows(ref HSSFSheet sheet1, int fromRowIndex, int rowCount)
+        {
+            sheet1.ShiftRows(fromRowIndex, sheet1.LastRowNum, rowCount, true, false, true);
+
+            for (int rowIndex = fromRowIndex; rowIndex < fromRowIndex + rowCount; rowIndex++)
+            {
+                HSSFRow rowSource = (HSSFRow)sheet1.GetRow((rowIndex + rowCount));
+                HSSFRow rowInsert = null;
+                if (rowSource == null)
+                {
+                    rowInsert = (HSSFRow)sheet1.CreateRow(rowIndex);
+                }
+                else
+                {
+                    rowInsert = (HSSFRow)sheet1.CreateRow(rowIndex);
+                    rowInsert.Height = rowSource.Height;
+                    for (int colIndex = 0; colIndex < rowSource.LastCellNum; colIndex++)
+                    {
+                        HSSFCell cellSource = (HSSFCell)rowSource.GetCell(colIndex);
+                        HSSFCell cellInsert = (HSSFCell)rowInsert.CreateCell(colIndex);
+                        if (cellSource != null)
+                        {
+                            cellInsert.CellStyle = cellSource.CellStyle;
+                        }
+                    }
                 }
             }
         }
