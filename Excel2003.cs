@@ -288,19 +288,19 @@ namespace ExcelTextReplace
                             Console.WriteLine("11");
                         }
                         int[] arr = ExcelTools.getCellPoint(ltDataVo.Localtion);
-                        IRow row = sheet.GetRow(arr[0]);
+                        IRow row = sheet.GetRow(arr[0] -1);
                         ICell cell;
                         if (row == null)
                         {
-                            row = sheet.CreateRow(arr[0]);
-                            cell = row.CreateCell(arr[1]);
+                            row = sheet.CreateRow(arr[0] - 1);
+                            cell = row.CreateCell(arr[1] - 1);
                         }
                         else
                         {
-                            cell = row.GetCell(arr[1]);
+                            cell = row.GetCell(arr[1] - 1);
                             if (cell == null)
                             {
-                                cell = row.CreateCell(arr[1]);
+                                cell = row.CreateCell(arr[1] - 1);
                             }
                         }
 
